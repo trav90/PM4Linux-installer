@@ -1,0 +1,10 @@
+#!/bin/sh
+PM_PLUGIN_PATH="/usr/lib64/mozilla/plugins-wrapped:/usr/lib64/mozilla/plugins"
+
+if [ -z "$MOZ_PLUGIN_PATH" ]; then
+	export MOZ_PLUGIN_PATH="$PM_PLUGIN_PATH"
+else
+	export MOZ_PLUGIN_PATH="$MOZ_PLUGIN_PATH:$PM_PLUGIN_PATH"
+fi
+
+exec /opt/palemoon/palemoon "$@"

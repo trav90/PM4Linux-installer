@@ -1,0 +1,35 @@
+#!/bin/bash
+
+unset CDPATH
+dlg ()
+{
+	yad --window-icon=system-lock-screen --geometry=500 "$@"
+}
+# Error dialog
+dlg_e ()
+{
+	dlg --title "Error" --image=gtk-dialog-error --button=gtk-ok --text "$1"
+}
+
+if [[ -z "$1" ]]; then
+	echo "Usage: $0 [command]"
+	exit 0
+fi
+
+if [[ $EUID == 0 ]]; then
+	exec "$@"
+else
+	if ! which sudo; then
+		dlg_e "Authentication could not be performed as sudo is not installed."
+		exit 127
+	fi
+	while true; do
+		pw="$(dlg --entry --hide-text --text "Please enter your password:" --image=dialog-password --title "Authentication required")" || exit 254
+		if ! echo "$pw" | sudo -Sk bash -c '[[ $EUID == 0 ]]'; then
+			dlg_e "The program could not be run, possibly because you typed in a wrong password, or you are not allowed to run sudo."
+		else
+			echo "$pw" | sudo -S "$@"
+			exit $?
+		fi
+	done
+fi

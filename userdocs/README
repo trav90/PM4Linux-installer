@@ -1,0 +1,22 @@
+# Pale Moon installer for Linux
+
+---
+
+## Using the installer
+
+- Extract the pminstaller.sh script.
+- Run the script from the terminal or from your file manager.
+- Follow the on-screen prompts and continue.
+
+Note:
+
+- The installer requires sudo. If it is not installed on your computer, run the installer as root by executing `su -c ./pminstaller.sh` from the terminal.
+- The installer may not run on some "lightweight" distributions since the standard command line tools use busybox (which does not implement all features of the command line tools).
+- If the installer does not run because the built-in copy of yad complains about being unable to load a particular library, then you clearly do not have the basic dependencies required for any recent Mozilla based product. Please update the related libraries and try again.
+- If you have any specialised requirements that the installer does not serve out of the box, then please use the command line instructions in the [pm4linux wiki](http://pm4linux.sf.net/wiki) for installing Pale Moon.
+
+## Support
+
+Some help documentation is available on the [pm4linux wiki](http://pm4linux.sf.net/wiki). You can also discuss them in the dedicated Linux board of the [Pale Moon forum](http://forum.palemoon.org/)
+
+Please note that support is not provided for old versions of the pminstaller tool. Please use the latest version of the installer at all times.
