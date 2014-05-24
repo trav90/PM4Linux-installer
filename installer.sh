@@ -61,11 +61,7 @@ stdoutparser ()
 # Checks if Pale Moon is installed
 pmcheck ()
 {
-	if which palemoon || [[ -d /opt/palemoon ]] || [[ -d /usr/lib/palemoon ]]; then
-		return 0
-	else
-		return 1
-	fi
+	which palemoon || [[ -d /opt/palemoon ]] || [[ -d /usr/lib/palemoon ]]
 }
 
 # Return priority list of applications registered with update-alternatives
@@ -171,10 +167,10 @@ pmremove_main ()
 	killall -v palemoon palemoon-bin
 	echo "Removing file associations..."
 	rm -vf /home/*/.local/share/applications/userapp-Pale\ Moon-*.desktop /home/*/.local/share/applications/mimeinfo.cache
-	if update-alternatives --display x-www-browser | grep -E /usr/bin/palemoon; then
+	if update-alternatives --display x-www-browser | grep /usr/bin/palemoon; then
 		update-alternatives --remove x-www-browser /usr/bin/palemoon
 	fi
-	if update-alternatives --display gnome-www-browser | grep -E /usr/bin/palemoon; then
+	if update-alternatives --display gnome-www-browser | grep /usr/bin/palemoon; then
 		update-alternatives --remove gnome-www-browser /usr/bin/palemoon
 	fi
 	echo "Deleting files..."
@@ -198,6 +194,12 @@ pmupdate_main ()
 	mv -v /opt/palemoon.temp/palemoon /opt
 	rm -vrf /opt/palemoon.temp
 	dlg_i "Pale Moon has been updated successfully."
+}
+
+# Retrieve Pale Moon archive
+arch_download ()
+{
+	gwget "http://$pm_hostname/installer/download.php?v=$1&a=$mtype" "$pm_archive"
 }
 
 # Retrieve latest version info
@@ -254,7 +256,7 @@ pminstall ()
 		esac
 	done
 
-	if gwget "http://$pm_hostname/installer/download.php?v=$pm_ver&a=$mtype" "$pm_archive"; then
+	if arch_download "$pm_ver"; then
 		pminstall_main >& 1 | stdoutparser | dlg_pw "Installing Pale Moon..." applications-system
 	else
 		dlg_e "The installation was aborted as the necessary files could not be retrieved."
@@ -289,8 +291,10 @@ pmupdate ()
 			dlg_e "The version information for the installed version of Pale Moon could not be retrieved. Please reinstall Pale Moon."
 		elif [[ "$pm_ver_inst" != "$pm_ver" ]]; then
 			dlg_q "Version $pm_ver is available, would you like to update Pale Moon now?" --button=gtk-yes --button=gtk-no || return
-			if gwget "http://$pm_hostname/installer/download.php?v=$pm_ver&a=$mtype" "$pm_archive"; then
+			if arch_download "$pm_ver"; then
 				pmupdate_main >& 1 | stdoutparser | dlg_pw "Updating Pale Moon..." system-software-update
+			else
+				dlg_e "The update was aborted as the necessary files could not be retrieved."
 			fi
 		else
 			dlg_i "You have the latest version of Pale Moon."
