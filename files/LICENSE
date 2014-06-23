@@ -1,0 +1,35 @@
+pminstaller is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 3 of the License, or (at your option) any later
+version.
+
+pminstaller is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+pminstaller. If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (C) 2014, George Brown <access2godzilla at gmail dot com>
+
+This project uses the following components which are copyrighted under the
+following terms:
+
+- yad - http://sourceforge.net/projects/yad-dialog/
+
+  YAD is free software; you can redistribute it and/or modify it under the terms
+  of the GNU General Public License as published by the Free Software
+  Foundation; either version 3 of the License, or (at your option) any later
+  version.
+
+  YAD is distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+  A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along with
+  YAD. If not, see <http://www.gnu.org/licenses/>.
+
+  Copyright (C) 2008-2014, Victor Ananjevsky <ananasik at gmail dot com>
+
+- `tools/*.wrapper` were copied from the respective Debian (wheezy) packages.
+  For copyright details, please refer to the details of these packages.
