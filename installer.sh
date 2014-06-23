@@ -1,5 +1,7 @@
 #!/bin/bash
+
 unset CDPATH
+
 case $(uname -m) in
 i?86)
 	mtype="i686"
@@ -97,7 +99,7 @@ setalternatives ()
 			;;
 	esac
 
-	if [[ $pref_req < 1 ]]; then
+	if [[ $pref_req -lt 1 ]]; then
 		echo "setalternatives: Priority too low!"
 	else
 		update-alternatives --install "/usr/bin/$1" "$1" /usr/bin/palemoon $pref_req
@@ -132,8 +134,8 @@ pminstall_main ()
 		return
 	fi
 
-	echo "Creating launch script..."
-	cp "$installer_dir/files/palemoon" /usr/bin/palemoon
+	echo "Creating symlink..."
+	ln -vs /opt/palemoon/palemoon /usr/bin/palemoon
 
 	echo "Creating icons..."
 	ln -vs /opt/palemoon/browser/chrome/icons/default/default16.png /usr/share/icons/hicolor/16x16/apps/palemoon.png
@@ -152,7 +154,8 @@ pminstall_main ()
 		pmaltset
 	fi
 
-	if [[ -d /usr/share/hunspell ]] && dlg_q "Would you like Pale Moon to use hunspell for spell checking?" --button=gtk-yes --button=gtk-no; then
+	# Only create hunspell symlink if language packages have been installed
+	if [[ "$(ls /usr/share/hunspell)" ]]; then
 		rm -vrf /opt/palemoon/dictionaries
 		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
 	fi
@@ -188,11 +191,18 @@ pmupdate_main ()
 	fi
 	echo "Closing running instances of Pale Moon..."
 	killall -v palemoon palemoon-bin
+
 	echo "Deleting files from the old version..."
 	rm -vrf /opt/palemoon
-	echo "Installing new version..."
+	echo "Installing the new version..."
 	mv -v /opt/palemoon.temp/palemoon /opt
-	rm -vrf /opt/palemoon.temp
+	echo "Create new symbolic links..."
+	rm /usr/bin/palemoon
+	ln -vs /opt/palemoon/palemoon /usr/bin/palemoon
+	if [[ "$(ls /usr/share/hunspell)" ]]; then
+		rm -vrf /opt/palemoon/dictionaries
+		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
+	fi
 	dlg_i "Pale Moon has been updated successfully."
 }
 
@@ -223,8 +233,7 @@ pminstall ()
 		return
 	fi
 	while true; do
-		pm_ver="$(dlg_q "Please type in the version you would like to install:" --entry "Latest version" --editable --button="Show versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
-
+		pm_ver="$(dlg_q "Please select/type in the version you would like to install:" --entry "Latest version" --editable --button="Show versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
 		errorlevel=$?
 		case $errorlevel in
 		2)
@@ -273,6 +282,12 @@ pmremove ()
 	dlg_q "Are you sure to uninstall Pale Moon from your computer?" --button=gtk-yes --button=gtk-no || return
 	pmremove_main >& 1 | stdoutparser | dlg_pw "Uninstalling Pale Moon..." gtk-delete
 	dlg_i "Pale Moon was uninstalled from your computer."
+}
+
+# View pminstaller license file (/files/LICENSE)
+view_license ()
+{
+	xdg-open "$installer_dir/files/LICENSE"
 }
 
 # User facing update operations
@@ -329,7 +344,7 @@ fi
 while true; do
 	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon installer\!</b>
 
-Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "Exit Pale Moon installer")" || break
+Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View license" "Exit Pale Moon installer")" || break
 
 	case "$ch" in
 	Install*)
@@ -340,6 +355,9 @@ Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Mo
 		;;
 	Update*)
 		pmupdate
+		;;
+	*license*)
+		view_license
 		;;
 	*)
 		break
