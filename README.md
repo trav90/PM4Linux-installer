@@ -1,4 +1,4 @@
-# README and LICENSE for pminstaller source
+# README for pminstaller source
 
 ---
 
