@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Make su behave like sudo while accepting arguments.
+
+while true; do
+	su -s /bin/bash -c "$(printf "%q " "$@")"
+	errorlevel=$?
+	[[ $errorlevel == 0 ]] && break
+	read -n 1 -p "Incorrect password/execution failed. Retry? (y/N)" ch
+	echo # Print \n
+	[[ ! "$ch" =~ [Yy] ]] && break
+done
+
+exit $errorlevel
