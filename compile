@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Compile the scripts into a single self-extracting script and package it within a *.tar.bz2
+
+# Exit on most errors
+set -e
+
 unset CDPATH
 
 pkgfileslist=("bin" "tools" "files" "installer.sh")
@@ -18,10 +23,7 @@ cd "$(dirname "$0")"
 selfdir="$(pwd)"
 
 if [[ -e build ]]; then
-	if ! rm -rf build; then
-		echo "Could not remove build directory"
-		exit 1
-	fi
+	rm -rf build
 fi
 
 echo "Copying required files..."
@@ -31,7 +33,7 @@ cd build
 
 # Perform required substitutions
 echo "Perform required substitutions in the script(s)..."
-sed "s/__HOSTNAME__/$pm_hostname/g" installer.sh > installer.sh.1
+sed "s|__HOSTNAME__|$pm_hostname|g" installer.sh > installer.sh.1
 mv installer.sh.1 installer.sh
 
 # Minify scripts
@@ -56,8 +58,11 @@ done < <(find . -type f)
 # Prepare SFX
 tar --verbose --numeric-owner --group=0 --owner=0 -cJf tmp.tar.xz ${pkgfileslist[@]}
 lines=$(($(cat "$sfxscript" | wc -l) + 1))
-sed "s/__LINENUM__/$lines/g" "$sfxscript" > "$installer"
+sed s/__LINENUM__/$lines/ "$sfxscript" > "$installer"
 cat tmp.tar.xz >> "$installer"
+checksum=$(sed -r s/__CHECKSUM__// "$installer" | sha256sum | grep -Eo [a-f0-9]{64})
+sed s/__CHECKSUM__/$checksum/ "$installer" > "$installer.1"
+mv "$installer.1" "$installer"
 
 # Package in redistributable format
 echo "Packaging installer within tarball..."

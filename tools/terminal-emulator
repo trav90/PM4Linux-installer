@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Searches for a terminal emulator.
+
+# Check if we are running inside a terminal emulator
+if [[ ! -z "$(tset -q)" ]]; then
+	exit 0
+fi
+
+# Terminal emulators that handle -e args correctly (test this with `footerm -e foo bar baz`)
+for i in x-terminal-emulator konsole lxterminal roxterm xterm rxvt urxvt mrxvt aterm aterm-xterm Eterm st sakura; do
+	if which $i &>/dev/null; then
+		echo "$i -e"
+		exit 0
+	fi
+done
+
+# Terminal emulators that don't handle -e args correctly (*.wrapper script must be placed in tools/)
+for i in gnome-terminal xfce4-terminal; do
+	if which $i &>/dev/null; then
+		echo "$i.wrapper -e"
+		exit 0
+	fi
+done
+
+exit 1
