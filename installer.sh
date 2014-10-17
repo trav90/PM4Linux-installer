@@ -129,6 +129,7 @@ pmaltset ()
 pminstall_main ()
 {
 	echo "Extracting archive..."
+	mkdir -p /opt
 	if ! tar -xvf "$pm_archive" -C /opt; then
 		dlg_e "An error occured during the extraction of the archive, possibly because it was corrupted."
 		return
