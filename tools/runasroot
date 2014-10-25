@@ -6,12 +6,21 @@ dlg ()
 {
 	yad --window-icon=system-lock-screen --geometry=500 "$@"
 }
+
 # Error dialog
 dlg_e ()
 {
 	dlg --title "Error" --image=gtk-dialog-error --button=gtk-ok --text "$1"
 }
 
+# Create a temp file that sets $XAUTHORITY, $DISPLAY and executes the actual command.
+create_tmp_script ()
+{
+	tmp_script=$(mktemp /tmp/runasroot.XXXXXXXXX)
+	printf "#!/bin/bash\nexport DISPLAY=\"$DISPLAY\"\nexport XAUTHORITY=\"$XAUTHORITY\"\nexec \"\$@\"" >> $tmp_script
+	chmod +x $tmp_script
+}		
+	
 if [[ -z "$1" ]]; then
 	echo "Usage: $0 [command]"
 	exit 0
@@ -27,7 +36,8 @@ if which sudo &>/dev/null; then
 		if ! echo "$pw" | sudo -Sk bash -c '[[ $EUID == 0 ]]'; then
 			dlg_e "The program could not be run, possibly because you typed in a wrong password, or you are not allowed to run sudo."
 		else
-			echo "$pw" | sudo -HS "$@"
+			create_tmp_script
+			echo "$pw" | sudo -S $tmp_script "$@"
 			exit $?
 		fi
 	done
@@ -36,6 +46,8 @@ else
 	if [[ $? != 0 ]]; then
 		dlg_e "A suitable terminal emulator was not found, please execute the required command from a terminal emulator."
 	else
-		exec $terminal_command "$(which su_wrapper)" "$@"
+		create_tmp_script "$@"
+		$terminal_command su_wrapper $tmp_script "$@"
+		exit $?
 	fi
 fi

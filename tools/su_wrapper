@@ -2,6 +2,8 @@
 
 # Make su behave like sudo while accepting arguments.
 
+echo "Please enter the password for root."
+
 while true; do
 	su -s /bin/bash -c "$(printf "%q " "$@")"
 	errorlevel=$?
