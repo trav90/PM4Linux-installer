@@ -28,7 +28,8 @@ fi
 
 echo "Copying required files..."
 mkdir build
-cp -rv ${pkgfileslist[@]} "$sfxscript" "$readmefile" build/
+cp -rv ${pkgfileslist[@]} "$sfxscript" build/
+fold -w 80 -s "$readmefile" > build/"$(basename "$readmefile")"
 cd build
 
 # Perform required substitutions
