@@ -17,7 +17,11 @@ dlg_e ()
 create_tmp_script ()
 {
 	tmp_script=$(mktemp /tmp/runasroot.XXXXXXXXX)
-	printf "#!/bin/bash\nexport DISPLAY='$DISPLAY'\nexport XAUTHORITY='$XAUTHORITY'\nexec \"\$@\"" >> $tmp_script
+	printf "\
+     #!/bin/bash
+     export DISPLAY='$DISPLAY'
+     [[ -z \$XAUTHORITY ]] && export XAUTHORITY='$XAUTHORITY'
+     exec \"\$@\"" >> $tmp_script
 	chmod +x $tmp_script
 }		
 	

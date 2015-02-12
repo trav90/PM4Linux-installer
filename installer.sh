@@ -15,7 +15,7 @@ cd "$(dirname "$0")"
 
 installer_dir="$(pwd)"
 lockfile_name="/tmp/pminstaller.lock"
-pm_hostname="__HOSTNAME__"
+base_url="__BASE_URL__"
 PATH="$installer_dir/bin/$mtype:$installer_dir/tools:$PATH"
 pm_archive="$installer_dir/palemoon.tar.bz2"
 
@@ -61,7 +61,7 @@ stdoutparser ()
 }
 
 # Checks if Pale Moon is installed
-pmcheck ()
+pm_is_installed ()
 {
 	which palemoon || [[ -d /opt/palemoon ]] || [[ -d /usr/lib/palemoon ]]
 }
@@ -208,20 +208,20 @@ pmupdate_main ()
 }
 
 # Retrieve Pale Moon archive
-arch_download ()
+archive_download ()
 {
-	gwget "http://$pm_hostname/installer/download.php?v=$1&a=$mtype" "$pm_archive"
+	gwget "$base_url/installer/download.php?v=$1&a=$mtype" "$pm_archive"
 }
 
 # Retrieve latest version info
-showlatest ()
+get_latest_version ()
 {
-	gwget "http://$pm_hostname/installer/latest.php" "$installer_dir/latest"
+	gwget "$base_url/installer/latest.php" "$installer_dir/latest"
 	cat "$installer_dir/latest"
 }
 
 # Check version number validity
-versionvalid ()
+is_version_valid ()
 {
 	[[ "$1" =~ ^([0-9]+\.)+[0-9ab]+$ ]]
 }
@@ -229,7 +229,7 @@ versionvalid ()
 # User facing install operations
 pminstall ()
 {
-	if pmcheck; then
+	if pm_is_installed; then
 		dlg_e "Another version of Pale Moon is already installed. Please uninstall it first and then install the version you need."
 		return
 	fi
@@ -246,16 +246,16 @@ pminstall ()
 		0)
 			case "$pm_ver" in
 			Latest*)
-				pm_ver="$(showlatest)"
+				pm_ver="$(get_latest_version)"
 
-				if ! versionvalid "$pm_ver"; then
+				if ! is_version_valid "$pm_ver"; then
 					dlg_e "The latest version number could not be retrieved!"
 				else
 					break
 				fi
 				;;
 			*)
-				if ! versionvalid "$pm_ver"; then
+				if ! is_version_valid "$pm_ver"; then
 					dlg_e "The indicated version number is invalid."
 				else
 					break
@@ -266,7 +266,7 @@ pminstall ()
 		esac
 	done
 
-	if arch_download "$pm_ver"; then
+	if archive_download "$pm_ver"; then
 		pminstall_main >& 1 | stdoutparser | dlg_pw "Installing Pale Moon..." applications-system
 	else
 		dlg_e "The installation was aborted as the necessary files could not be retrieved."
@@ -276,7 +276,7 @@ pminstall ()
 # User facing uninstall operations
 pmremove ()
 {
-	if ! pmcheck; then
+	if ! pm_is_installed; then
 		dlg_e "Pale Moon is not installed on your computer."
 		return
 	fi
@@ -294,20 +294,20 @@ view_license ()
 # User facing update operations
 pmupdate ()
 {
-	if ! pmcheck; then
+	if ! pm_is_installed; then
 		dlg_e "Pale Moon is not installed on your computer."
 		return
 	else
-		pm_ver="$(showlatest)"
+		pm_ver="$(get_latest_version)"
 		pm_ver_inst="$(grep -E '^Version=' /opt/palemoon/application.ini | grep -Eo '([0-9]+\.)+[0-9ab]+$')"
-		if ! versionvalid "$pm_ver"; then
+		if ! is_version_valid "$pm_ver"; then
 			dlg_e "The latest version number could not be retrieved!"
 			return
 		elif [[ -z "$pm_ver_inst" ]]; then
 			dlg_e "The version information for the installed version of Pale Moon could not be retrieved. Please reinstall Pale Moon."
 		elif [[ "$pm_ver_inst" != "$pm_ver" ]]; then
 			dlg_q "Version $pm_ver is available, would you like to update Pale Moon now?" --button=gtk-yes --button=gtk-no || return
-			if arch_download "$pm_ver"; then
+			if archive_download "$pm_ver"; then
 				pmupdate_main >& 1 | stdoutparser | dlg_pw "Updating Pale Moon..." system-software-update
 			else
 				dlg_e "The update was aborted as the necessary files could not be retrieved."

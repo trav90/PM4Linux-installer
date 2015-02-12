@@ -8,8 +8,7 @@ fi
 if which wget &>/dev/null; then
 	wget "$1" -O "$2" 2>&1 | sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading files..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --auto-kill --button=gtk-cancel
 elif which curl &>/dev/null; then
-	# curl support is very much experimental and does not support being cancelled!
-	curl "$1" -o "$2" 2>&1 | stdbuf -oL tr '\r' '\n' | sed -ur 's/^\s*([0-9]+).*/\1\n#Downloading... \1%/' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading files..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --no-buttons
+	curl -Lf "$1" -o "$2" 2>&1 | stdbuf -oL tr '\r' '\n' | sed -ur 's/^\s*([0-9]+).*/\1\n#Downloading... \1%/' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading files..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --no-buttons
 else
 	exit 2
 fi

@@ -1,38 +1,25 @@
-# Pale Moon installer for Linux
+# Pale Moon for Linux installer
 
 ---
 
 ## Using the installer
 
 - Extract the contents of the archive to your home directory.
-- Run the "pminstaller.sh" script from the file manager by double clicking on
-  it. If, however, this does not work for a some reason, then, type the
-  following in the terminal:
+- Run the "pminstaller.sh" script from the file manager by double clicking on it. If, however, this does not work for some reason, then open a terminal emulator window, type the following and hit enter.
 
 		~/pminstaller.sh
 
-  (Assuming the "pminstaller.sh" script is placed in the home directory, as
-  instructed above).
-- Follow the on-screen prompts and continue.
+  (Assuming the "pminstaller.sh" script is placed in the home directory, as instructed above).
+- Follow the on-screen prompts to continue.
 
 Note:
 
-- The installer may not run on some "lightweight" distributions since the
-  standard command line tools use busybox (which does not implement all features
-  of the required command line tools).
-- If the installer does not run because the built-in copy of yad complains about
-  being unable to load a particular library, then you clearly do not have the
-  the basic dependencies required for any recent Mozilla based product. Please
-  update the related libraries and try again.
-- If you have any specialised requirements that the installer does not serve out
-  of the box, then please use the command line instructions in the
-  [pm4linux wiki](http://pm4linux.sf.net/wiki) for installing Pale Moon.
+- The installer may not run on some "lightweight" distributions since the standard command line tools use busybox (which does not implement all features of the required command line tools).
+- If the installer does not run because the built-in copy of yad complains about being unable to load a particular library, then you clearly do not have the basic dependencies required for any recent Mozilla based product. Please update the related libraries and try again.
+- If you have any specialized requirements that the installer does not serve out of the box, then please use the command line instructions in the Pale Moon for Linux wiki (http://pm4linux.sf.net/wiki) for installing Pale Moon.
 
 ## Support
 
-Some help documentation is available on the [pm4linux wiki]
-(http://pm4linux.sf.net/wiki). You can also discuss them in the dedicated Linux
-board of the [Pale Moon forum](http://forum.palemoon.org/).
+Some help documentation is available on the Pale Moon for Linux wiki (http://pm4linux.sf.net/wiki). You can also discuss them in the dedicated Linux board of the Pale Moon forum (http://forum.palemoon.org/).
 
-Please note that support is not provided for old versions of the installer.
-Please use the latest version of the installer at all times.
+Please note that support is not provided for old versions of the installer. Please use the latest version of the installer at all times.

@@ -2,10 +2,57 @@
 
 # Compile the scripts into a single self-extracting script and package it within a *.tar.bz2
 
+show_help () {
+   echo "Usage: $0 [OPTIONS]"
+   cat << EOM
+Compile the scripts into a single self-extracting script and package it within a
+*.tar.bz2.
+
+Options:
+--base-url=URL    Use a custom base URL instead of the default
+--no-minify       Don't minify scripts
+--no-cleanup      Don't remove temporary files from build/ directory.
+
+EOM
+}
+
+show_error_msg () {
+   echo "Argument not recognised: $1"
+   echo "Please type $0 --help for help."
+}
+
 # Exit on most errors
 set -e
 
 unset CDPATH
+
+while [[ ! -z "$1" ]]; do
+   case "$1" in
+   --base-url=*)
+      base_url="$(echo "$1" | sed -r 's|^--base-url=||g;s|/$||g')"
+      if [[ ! $base_url =~ ^(https?|ftp)://[a-z0-9_.]+/.*$ ]]; then
+         echo "The base URL is not valid!"
+         exit 1
+      fi
+      shift
+      ;;
+   --no-minify)
+      no_minify=1
+      shift
+      ;;
+   --no-cleanup)
+      no_cleanup=1
+      shift
+      ;;
+   --help)
+      show_help
+      exit 0
+      ;;
+   *)
+      show_error_msg "$1"
+      exit 1
+   esac
+done
 
 pkgfileslist=("bin" "tools" "files" "installer.sh")
 sfxscript="sfx.sh"
@@ -13,10 +60,8 @@ readmefile="userdocs/README"
 installer="pminstaller.sh"
 archive="pminstaller.tar.bz2"
 
-if [[ -z "$1" ]]; then
-	pm_hostname="pm4linux.sourceforge.net"
-else
-	pm_hostname="$1"
+if [[ -z "$base_url" ]]; then
+	base_url="http://pm4linux.sourceforge.net"
 fi
 
 cd "$(dirname "$0")"
@@ -28,24 +73,27 @@ fi
 
 echo "Copying required files..."
 mkdir build
-cp -rv ${pkgfileslist[@]} "$sfxscript" "$readmefile" build/
+cp -rv ${pkgfileslist[@]} "$sfxscript" build/
+fold -w 80 -s "$readmefile" > build/"$(basename "$readmefile")"
 cd build
 
 # Perform required substitutions
 echo "Perform required substitutions in the script(s)..."
-sed "s|__HOSTNAME__|$pm_hostname|g" installer.sh > installer.sh.1
+sed "s|__BASE_URL__|$base_url|g" installer.sh > installer.sh.1
 mv installer.sh.1 installer.sh
 
 # Minify scripts
-echo "Minifying scripts..."
-while read filename; do
-	if head -n 1 "$filename" | grep -E '^#!/bin/(ba)?sh' &> /dev/null; then
-		echo "Minifying $filename..."
-		# bash_obfus seems to have some problems with stripping indented comments, so...
-		"$selfdir/bash_obfus.plx" -i "$filename" -o /dev/stdout -C -F | grep -Ev '^#[^!]' > "$filename.1"
-		mv "$filename.1" "$filename"
-	fi
-done < <(find . -type f ! -wholename "*/files/*")
+if [[ -z $no_minify ]]; then
+   echo "Minifying scripts..."
+   while read filename; do
+      if head -n 1 "$filename" | grep -E '^#!/bin/(ba)?sh' &> /dev/null; then
+         echo "Minifying $filename..."
+         # bash_obfus seems to have some problems with stripping indented comments, so...
+         "$selfdir/bash_obfus.plx" -i "$filename" -o /dev/stdout -C -F | grep -Ev '^#[^!]' > "$filename.1"
+         mv "$filename.1" "$filename"
+      fi
+   done < <(find . -type f ! -wholename "*/files/*")
+fi
 
 # Set permissions
 echo "Setting permissions for files in SFX archive..."
@@ -68,4 +116,6 @@ mv "$installer.1" "$installer"
 echo "Packaging installer within tarball..."
 chmod -v 755 "$installer"
 tar --verbose --numeric-owner --group=0 --owner=0  -cjf "$archive" "$(basename "$readmefile")" "$installer"
-find . ! -name "$archive" -delete
+if [[ -z $no_cleanup ]]; then
+   find . ! -name "$archive" -delete
+fi
