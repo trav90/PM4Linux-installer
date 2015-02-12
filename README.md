@@ -1,6 +1,10 @@
-# README for pminstaller source
+# README for PM4Linux-installer source
 
 ---
+
+PM4Linux-installer, also referred to as pminstaller, is a program that is meant
+to ease installation of the Pale Moon binaries on Linux, made available on
+pm4linux.sourceforge.net.
 
 ## Compiling from source
 
@@ -8,14 +12,7 @@ To compile from source, type in the following:
 
 	./compile
 
-You can use a custom hostname/IP address instead of always having to contact
-Sourceforge:
-
-	./compile 10.0.2.2
-
-You can also specify a directory in this manner:
-
-	./compile 10.0.2.2/foo
+A full list of options can be retrieved by executing `./compile --help`.
 
 ## Technical details
 
@@ -40,7 +37,7 @@ following manner:
 
 	+-----------------------------------+
 	| <--minified contents of sfx.sh--> |
-	+-----[xz compressed tar data]------|
+	|-----[xz compressed tar data]------|
 	|bin/                               |
 	|    [...]                          |
 	|tools/                             |
@@ -57,4 +54,4 @@ distribution.
 The `files/LICENSE` file only relates to the files bundled into the installer.
 For example `bash_obfus.plx` is not bundled in the installer and the
 `files/LICENSE` file leaves out the licensing terms for `bashobfus`. (The
-following was valid at the time of this writing.)
+preceding was valid at the time of this writing.)
