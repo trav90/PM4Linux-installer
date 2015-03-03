@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A graphical frontend for su(do).
+# A graphical front end for su(do).
 
 dlg ()
 {
@@ -36,7 +36,7 @@ fi
 
 if which sudo &>/dev/null; then
 	while true; do
-		pw="$(dlg --entry --hide-text --text "Please enter your password:" --image=dialog-password --title "Authorisation required")" || exit 254
+		pw="$(dlg --entry --hide-text --text "Please enter your password:" --image=dialog-password --title "Authorization required")" || exit 254
 		if ! echo "$pw" | sudo -Sk bash -c '[[ $EUID == 0 ]]'; then
 			dlg_e "The program could not be run, possibly because you typed in a wrong password, or you are not allowed to run sudo."
 		else

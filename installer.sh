@@ -131,7 +131,7 @@ pminstall_main ()
 	echo "Extracting archive..."
 	mkdir -p /opt
 	if ! tar -xvf "$pm_archive" -C /opt; then
-		dlg_e "An error occured during the extraction of the archive, possibly because it was corrupted."
+		dlg_e "An error occurred during the extraction of the archive, possibly because it was corrupted."
 		return
 	fi
 
@@ -187,7 +187,7 @@ pmupdate_main ()
 	mkdir /opt/palemoon.temp
 	echo "Extracting archive..."
 	if ! tar -xvf "$pm_archive" -C /opt/palemoon.temp; then
-		dlg_e "An error occured during the extraction of the archive, possibly because it was corrupted."
+		dlg_e "An error occurred during the extraction of the archive, possibly because it was corrupted."
 		return
 	fi
 	echo "Closing running instances of Pale Moon..."

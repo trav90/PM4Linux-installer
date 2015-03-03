@@ -17,7 +17,7 @@ EOM
 }
 
 show_error_msg () {
-   echo "Argument not recognised: $1"
+   echo "Argument not recognized: $1"
    echo "Please type $0 --help for help."
 }
 
