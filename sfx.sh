@@ -5,7 +5,7 @@
 unset CDPATH
 
 if [[ ! "$(sed -r s/[a-f0-9]{64}// "$0" | sha256sum)" =~ __CHECKSUM__ ]]; then
-	echo "The installer is damaged!"
+	echo "The installer is damaged! Please redownload the installer and try again."
 	exit 2
 fi
 

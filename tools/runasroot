@@ -38,7 +38,7 @@ if which sudo &>/dev/null; then
 	while true; do
 		pw="$(dlg --entry --hide-text --text "Please enter your password:" --image=dialog-password --title "Authorization required")" || exit 254
 		if ! echo "$pw" | sudo -Sk bash -c '[[ $EUID == 0 ]]'; then
-			dlg_e "The program could not be run, possibly because you typed in a wrong password, or you are not allowed to run sudo."
+			dlg_e "The installer must be run as root. Please verify your password is correct and that you have sudo rights and then try again."
 		else
 			create_tmp_script
 			echo "$pw" | sudo -S $tmp_script "$@"
@@ -48,7 +48,7 @@ if which sudo &>/dev/null; then
 else
 	terminal_command=$(terminal-emulator)
 	if [[ $? != 0 ]]; then
-		dlg_e "A suitable terminal emulator was not found, please execute the required command from a terminal emulator."
+		dlg_e "A suitable terminal emulator could not be found! Please execute the required command from a terminal emulator."
 	else
 		create_tmp_script
 		$terminal_command su_wrapper $tmp_script "$@"
