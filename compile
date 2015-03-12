@@ -54,7 +54,7 @@ while [[ ! -z "$1" ]]; do
    esac
 done
 
-pkgfileslist=("bin" "tools" "files" "installer.sh")
+pkgfileslist=("bin" "tools" "files" "userdocs" "installer.sh")
 sfxscript="sfx.sh"
 readmefile="userdocs/README"
 installer="pminstaller.sh"

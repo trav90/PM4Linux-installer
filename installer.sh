@@ -291,6 +291,12 @@ view_license ()
 	xdg-open "$installer_dir/files/LICENSE"
 }
 
+# View pminstaller readme file (/userdocs/README)
+view_readme ()
+{
+	xdg-open "$installer_dir/userdocs/README"
+}
+
 # User facing update operations
 pmupdate ()
 {
@@ -345,7 +351,7 @@ fi
 while true; do
 	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon for Linux installer\!</b>
 
-Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View license" "Exit Pale Moon for Linux installer")" || break
+Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View readme" "View license" "Exit Pale Moon for Linux installer")" || break
 
 	case "$ch" in
 	Install*)
@@ -356,6 +362,9 @@ Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Mo
 		;;
 	Update*)
 		pmupdate
+		;;
+	*readme*)
+		view_readme
 		;;
 	*license*)
 		view_license
