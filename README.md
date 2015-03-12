@@ -44,6 +44,8 @@ following manner:
 	|    [...]                          |
 	|files/                             |
 	|    [...]                          |
+	|userdocs/			    |
+	|    [...]			    |
 	+-----------------------------------+
 
 ## Licensing information
