@@ -21,7 +21,7 @@ pm_archive="$installer_dir/palemoon.tar.bz2"
 
 dlg ()
 {
-	yad --window-icon=system-installer --title "Pale Moon installer" "$@"
+	yad --window-icon=system-installer --title "Pale Moon for Linux installer v0.1.7" "$@"
 }
 
 # Error dialog
@@ -343,9 +343,9 @@ if ! grep sse2 /proc/cpuinfo; then
 fi
 
 while true; do
-	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon installer\!</b>
+	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon for Linux installer\!</b>
 
-Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View license" "Exit Pale Moon installer")" || break
+Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View license" "Exit Pale Moon for Linux installer")" || break
 
 	case "$ch" in
 	Install*)
