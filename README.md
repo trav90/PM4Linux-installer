@@ -1,8 +1,8 @@
-# README for PM4Linux-installer source
+# README for Pale Moon for Linux installer source
 
 ---
 
-PM4Linux-installer, also referred to as pminstaller, is a program that is meant
+The Pale Moon for Linux installer (also referred to as pminstaller) is a program that is meant
 to ease installation of the Pale Moon binaries on Linux, made available on
 pm4linux.sourceforge.net.
 
@@ -44,8 +44,8 @@ following manner:
 	|    [...]                          |
 	|files/                             |
 	|    [...]                          |
-	|userdocs/			    |
-	|    [...]			    |
+	|userdocs/                          |
+	|    [...]                          |
 	+-----------------------------------+
 
 ## Licensing information
