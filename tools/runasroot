@@ -24,7 +24,17 @@ create_tmp_script ()
      exec \"\$@\"" >> $tmp_script
 	chmod +x $tmp_script
 }		
-	
+
+enable_root_connect_to_x ()
+{
+	which xhost &>/dev/null && xhost +
+}
+
+disable_root_connect_to_x ()
+{
+	which xhost &>/dev/null && xhost -
+}	
+
 if [[ -z "$1" ]]; then
 	echo "Usage: $0 [command]"
 	exit 0
@@ -41,7 +51,10 @@ if which sudo &>/dev/null; then
 			dlg_e "The installer must be run as root. Please verify your password is correct and that you have sudo rights and then try again."
 		else
 			create_tmp_script
+			enable_root_connect_to_x
 			echo "$pw" | sudo -S $tmp_script "$@"
+			errorlevel=$?
+			disable_root_connect_to_x
 			exit $?
 		fi
 	done
@@ -51,7 +64,10 @@ else
 		dlg_e "A suitable terminal emulator could not be found! Please execute the required command from a terminal emulator."
 	else
 		create_tmp_script
+		enable_root_connect_to_x
 		$terminal_command su_wrapper $tmp_script "$@"
+		errorlevel=$?
+		disable_root_connect_to_x
 		exit $?
 	fi
 fi

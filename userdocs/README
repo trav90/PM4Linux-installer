@@ -1,4 +1,4 @@
-## Pale Moon for Linux installer
+# Pale Moon for Linux installer
 
 - Version 0.1.7
 
@@ -18,7 +18,7 @@ Note:
 
 - The installer may not run on some "lightweight" distributions since the standard command line tools use busybox (which does not implement all features of the required command line tools).
 - Do not invoke the installer as root (e.g. "sudo ./pminstaller.sh"). On some distros, the sudo command will strip the XAUTHORITY variable (without which any graphical program cannot run). The installer will automatically elevate itself using su(do).
-- If you recieve a "Gtk-WARNING **: cannot open display" error when trying to run the installer, ensure that xhost is installed on your system and then execute "xhost +" (minus quotes) from a terminal. Then try to run the installer again.
+- If you recieve a "Gtk-WARNING **: cannot open display" error when trying to run the installer, ensure that xhost is installed on your system then try to run the installer again.
 - If the installer does not run because the built-in copy of yad complains about being unable to load a particular library, then you clearly do not have the basic dependencies required for any recent Mozilla based product. Please update the related libraries and try again.
 - If you have any specialized requirements that the installer does not serve out of the box, then please use the command line instructions in the Pale Moon for Linux wiki (http://pm4linux.sf.net/wiki) for installing Pale Moon.
 
@@ -26,6 +26,6 @@ Note:
 
 Some help documentation is available on the Pale Moon for Linux wiki (http://pm4linux.sf.net/wiki). You can also ask questions on the dedicated Linux board of the Pale Moon forum (http://forum.palemoon.org/).
 
-Please note that support is not provided for older versions of the installer. Please use the latest version of the installer at all times.
+Please note that support is not provided for older versions of the installer. Please use the latest version at all times.
 
 You can find the latest version of the installer at http://pm4linux.sourceforge.net/
