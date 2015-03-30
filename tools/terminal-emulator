@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Searches for a terminal emulator.
+# Search for a terminal emulator.
 
 # Check if we are running inside a terminal emulator
 if [[ ! -z "$(tset -q)" ]]; then
