@@ -48,7 +48,7 @@ if which sudo &>/dev/null; then
 	while true; do
 		pw="$(dlg --entry --hide-text --text "Please enter your password:" --image=dialog-password --title "Authorization required")" || exit 254
 		if ! echo "$pw" | sudo -Sk bash -c '[[ $EUID == 0 ]]'; then
-			dlg_e "The installer must be run as root. Please verify your password is correct and that you have sudo rights and then try again."
+			dlg_e "The installer could not start. Please verify your password is correct and that you have sudo rights and then try again."
 		else
 			create_tmp_script
 			enable_root_connect_to_x
