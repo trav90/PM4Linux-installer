@@ -21,7 +21,7 @@ pm_archive="$installer_dir/palemoon.tar.bz2"
 
 dlg ()
 {
-	yad --window-icon=system-installer --title "Pale Moon for Linux installer v0.1.7" "$@"
+	yad --window-icon=system-installer --title "Pale Moon for Linux installer v0.1.8" "$@"
 }
 
 # Error dialog
