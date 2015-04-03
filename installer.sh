@@ -191,7 +191,7 @@ pmupdate_main ()
 		return
 	fi
 	echo "Closing all running instances of Pale Moon..."
-	killall -v palemoon palemoon-bin
+	killall -v palemoon palemoon-bin 2>/dev/null
 
 	echo "Deleting files from the old version..."
 	rm -vrf /opt/palemoon
@@ -344,7 +344,7 @@ if ! mklock; then
 fi
 
 # Processor check
-if ! grep sse2 /proc/cpuinfo; then
+if ! grep sse2 /proc/cpuinfo >dev/null; then
 	dlg_e "Pale Moon requires a processor that supports the SSE2 instruction set."
 fi
 
