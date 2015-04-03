@@ -344,7 +344,7 @@ if ! mklock; then
 fi
 
 # Processor check
-if ! grep sse2 /proc/cpuinfo >dev/null; then
+if ! grep sse2 /proc/cpuinfo >/dev/null; then
 	dlg_e "Pale Moon requires a processor that supports the SSE2 instruction set."
 fi
 
