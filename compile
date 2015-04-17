@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Constants
+base_url="http://pm4linux.sourceforge.net"
+version="0.1.8a"
+
 # Compile the scripts into a single self-extracting script and package it within a *.tar.bz2
 
 show_help () {
@@ -58,11 +62,7 @@ pkgfileslist=("bin" "tools" "files" "userdocs" "installer.sh")
 sfxscript="sfx.sh"
 readmefile="userdocs/README"
 installer="pminstaller.sh"
-archive="pminstaller.tar.bz2"
-
-if [[ -z "$base_url" ]]; then
-	base_url="http://pm4linux.sourceforge.net"
-fi
+archive="pminstaller-$version.tar.bz2"
 
 cd "$(dirname "$0")"
 selfdir="$(pwd)"
@@ -79,8 +79,9 @@ cd build
 
 # Perform required substitutions
 echo "Perform required substitutions in the script(s)..."
-sed "s|__BASE_URL__|$base_url|g" installer.sh > installer.sh.1
-mv installer.sh.1 installer.sh
+while read filename; do
+	sed -i'' -r "s|__BASE_URL__|$base_url|g;s|__VERSION__|$version|g" "$filename"
+done < <(find . -type f ! -wholename '*/bin/*')
 
 # Minify scripts
 if [[ -z $no_minify ]]; then
