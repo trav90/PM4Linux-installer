@@ -21,7 +21,7 @@ pm_archive="$installer_dir/palemoon.tar.bz2"
 
 dlg ()
 {
-	yad --window-icon=system-installer --title "Pale Moon installer" "$@"
+	yad --window-icon=system-installer --title "Pale Moon for Linux installer v0.1.8" "$@"
 }
 
 # Error dialog
@@ -60,7 +60,7 @@ stdoutparser ()
 	sed -ur 's/^(.*)$/#\1/g'
 }
 
-# Checks if Pale Moon is installed
+# Check if Pale Moon is already installed
 pm_is_installed ()
 {
 	which palemoon || [[ -d /opt/palemoon ]] || [[ -d /usr/lib/palemoon ]]
@@ -109,7 +109,7 @@ setalternatives ()
 # Configure Pale Moon with update-alternatives
 pmaltset ()
 {
-	ch="$(dlg_q "'update-alternatives' is a system to help determine the most preferred application. Amongst all your installed browsers, how preferred should Pale Moon be?" --entry "Most preferred browser" "Least preferred browser" "Skip configuration")" || return
+	ch="$(dlg_q "'update-alternatives' determines the most preferred applications on your computer. Among all your installed browsers, how preferred should Pale Moon be?" --entry "Most preferred browser" "Least preferred browser" "Skip configuration")" || return
 	case "$ch" in
 	Most*)
 		setalternatives gnome-www-browser max
@@ -131,7 +131,7 @@ pminstall_main ()
 	echo "Extracting archive..."
 	mkdir -p /opt
 	if ! tar -xvf "$pm_archive" -C /opt; then
-		dlg_e "An error occured during the extraction of the archive, possibly because it was corrupted."
+		dlg_e "An error occurred while extracting the archive, possibly because it is corrupted. Please try again."
 		return
 	fi
 
@@ -161,13 +161,13 @@ pminstall_main ()
 		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
 	fi
 
-	dlg_i "Pale Moon was successfully installed on your computer."
+	dlg_i "Pale Moon has been successfully installed on your computer!"
 }
 
 # Uninstall Pale Moon
 pmremove_main ()
 {
-	echo "Closing running instances of Pale Moon..."
+	echo "Closing all running instances of Pale Moon..."
 	killall -v palemoon palemoon-bin
 	echo "Removing file associations..."
 	rm -vf /home/*/.local/share/applications/userapp-Pale\ Moon-*.desktop /home/*/.local/share/applications/mimeinfo.cache
@@ -187,24 +187,24 @@ pmupdate_main ()
 	mkdir /opt/palemoon.temp
 	echo "Extracting archive..."
 	if ! tar -xvf "$pm_archive" -C /opt/palemoon.temp; then
-		dlg_e "An error occured during the extraction of the archive, possibly because it was corrupted."
+		dlg_e "An error occurred while extracting the archive, possibly because it is corrupted. Please try again."
 		return
 	fi
-	echo "Closing running instances of Pale Moon..."
+	echo "Closing all running instances of Pale Moon..."
 	killall -v palemoon palemoon-bin 2>/dev/null
 
 	echo "Deleting files from the old version..."
 	rm -vrf /opt/palemoon
 	echo "Installing the new version..."
 	mv -v /opt/palemoon.temp/palemoon /opt
-	echo "Create new symbolic links..."
+	echo "Creating new symbolic links..."
 	rm /usr/bin/palemoon
 	ln -vs /opt/palemoon/palemoon /usr/bin/palemoon
 	if [[ "$(ls /usr/share/hunspell)" ]]; then
 		rm -vrf /opt/palemoon/dictionaries
 		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
 	fi
-	dlg_i "Pale Moon has been updated successfully."
+	dlg_i "Pale Moon has been updated successfully!"
 }
 
 # Retrieve Pale Moon archive
@@ -230,7 +230,7 @@ is_version_valid ()
 pminstall ()
 {
 	if pm_is_installed; then
-		dlg_e "Another version of Pale Moon is already installed. Please uninstall it first and then install the version you need."
+		dlg_e "Another version of Pale Moon is already installed. Please remove the installed version and try again."
 		return
 	fi
 	while true; do
@@ -249,14 +249,14 @@ pminstall ()
 				pm_ver="$(get_latest_version)"
 
 				if ! is_version_valid "$pm_ver"; then
-					dlg_e "The latest version number could not be retrieved!"
+					dlg_e "The latest version number could not be retrieved. Please check your network connection and try again."
 				else
 					break
 				fi
 				;;
 			*)
 				if ! is_version_valid "$pm_ver"; then
-					dlg_e "The indicated version number is invalid."
+					dlg_e "The selected version number is invalid. Please try again."
 				else
 					break
 				fi
@@ -269,7 +269,7 @@ pminstall ()
 	if archive_download "$pm_ver"; then
 		pminstall_main >& 1 | stdoutparser | dlg_pw "Installing Pale Moon..." applications-system
 	else
-		dlg_e "The installation was aborted as the necessary files could not be retrieved."
+		dlg_e "The installation was aborted because the necessary files could not be retrieved. Please check your network connection and try again."
 	fi
 }
 
@@ -280,15 +280,21 @@ pmremove ()
 		dlg_e "Pale Moon is not installed on your computer."
 		return
 	fi
-	dlg_q "Are you sure to uninstall Pale Moon from your computer?" --button=gtk-yes --button=gtk-no || return
+	dlg_q "Are you sure you want to uninstall Pale Moon from your computer?" --button=gtk-yes --button=gtk-no || return
 	pmremove_main >& 1 | stdoutparser | dlg_pw "Uninstalling Pale Moon..." gtk-delete
-	dlg_i "Pale Moon was uninstalled from your computer."
+	dlg_i "Pale Moon has been uninstalled from your computer."
 }
 
 # View pminstaller license file (/files/LICENSE)
 view_license ()
 {
 	xdg-open "$installer_dir/files/LICENSE"
+}
+
+# View pminstaller readme file (/userdocs/README)
+view_readme ()
+{
+	xdg-open "$installer_dir/userdocs/README"
 }
 
 # User facing update operations
@@ -301,19 +307,19 @@ pmupdate ()
 		pm_ver="$(get_latest_version)"
 		pm_ver_inst="$(grep -E '^Version=' /opt/palemoon/application.ini | grep -Eo '([0-9]+\.)+[0-9ab]+$')"
 		if ! is_version_valid "$pm_ver"; then
-			dlg_e "The latest version number could not be retrieved!"
+			dlg_e "The latest version number could not be retrieved. Please check your network connection and try again."
 			return
 		elif [[ -z "$pm_ver_inst" ]]; then
-			dlg_e "The version information for the installed version of Pale Moon could not be retrieved. Please reinstall Pale Moon."
+			dlg_e "Could not determine the version of Pale Moon currently installed. Please reinstall Pale Moon."
 		elif [[ "$pm_ver_inst" != "$pm_ver" ]]; then
 			dlg_q "Version $pm_ver is available, would you like to update Pale Moon now?" --button=gtk-yes --button=gtk-no || return
 			if archive_download "$pm_ver"; then
 				pmupdate_main >& 1 | stdoutparser | dlg_pw "Updating Pale Moon..." system-software-update
 			else
-				dlg_e "The update was aborted as the necessary files could not be retrieved."
+				dlg_e "The update was aborted because the necessary files could not be retrieved. Please check your network connection and try again."
 			fi
 		else
-			dlg_i "You have the latest version of Pale Moon."
+			dlg_i "You already have the latest version of Pale Moon."
 		fi
 	fi
 }
@@ -338,14 +344,18 @@ if ! mklock; then
 fi
 
 # Processor check
+<<<<<<< HEAD
 if ! grep sse2 /proc/cpuinfo >/dev/null; then
+=======
+if ! grep sse2 /proc/cpuinfo >dev/null; then
+>>>>>>> upstream/master
 	dlg_e "Pale Moon requires a processor that supports the SSE2 instruction set."
 fi
 
 while true; do
-	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon installer\!</b>
+	ch="$(dlg_w --image=preferences-system --list --text "<b>Welcome to the Pale Moon for Linux installer\!</b>
 
-Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View license" "Exit Pale Moon installer")" || break
+Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Moon" "Update Pale Moon" "View readme" "View license" "Exit Pale Moon for Linux installer")" || break
 
 	case "$ch" in
 	Install*)
@@ -356,6 +366,9 @@ Select an action to perform:" --column "" "Install Pale Moon" "Uninstall Pale Mo
 		;;
 	Update*)
 		pmupdate
+		;;
+	*readme*)
+		view_readme
 		;;
 	*license*)
 		view_license
