@@ -238,7 +238,7 @@ pminstall ()
 		errorlevel=$?
 		case $errorlevel in
 		2)
-			xdg-open http://sourceforge.net/p/pm4linux/files &
+			xdg-open http://linux.palemoon.org &
 			;;
 		1)
 			return
