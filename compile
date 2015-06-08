@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Constants
-base_url="http://pm4linux.sourceforge.net"
-version="0.1.8a"
+base_url="http://linux.palemoon.org"
+version="0.2.0"
 
 # Compile the scripts into a single self-extracting script and package it within a *.tar.bz2
 
