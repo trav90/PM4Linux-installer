@@ -204,6 +204,7 @@ pmupdate_main ()
 		rm -vrf /opt/palemoon/dictionaries
 		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
 	fi
+	rm -r /opt/palemoon.temp
 	dlg_i "Pale Moon has been updated successfully!"
 }
 
