@@ -184,7 +184,7 @@ pmremove_main ()
 # Update Pale Moon
 pmupdate_main ()
 {
-	/tmp/pm4linux
+	mkdir /tmp/pm4linux
 	echo "Extracting archive..."
 	if ! tar -xvf "$pm_archive" -C /tmp/pm4linux; then
 		dlg_e "An error occurred while extracting the archive, possibly because it is corrupted. Please try again."
