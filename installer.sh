@@ -184,9 +184,9 @@ pmremove_main ()
 # Update Pale Moon
 pmupdate_main ()
 {
-	mkdir /opt/palemoon.temp
+	/tmp/pm4linux
 	echo "Extracting archive..."
-	if ! tar -xvf "$pm_archive" -C /opt/palemoon.temp; then
+	if ! tar -xvf "$pm_archive" -C /tmp/pm4linux; then
 		dlg_e "An error occurred while extracting the archive, possibly because it is corrupted. Please try again."
 		return
 	fi
@@ -196,7 +196,7 @@ pmupdate_main ()
 	echo "Deleting files from the old version..."
 	rm -vrf /opt/palemoon
 	echo "Installing the new version..."
-	mv -v /opt/palemoon.temp/palemoon /opt
+	mv -v /tmp/pm4linux/palemoon /opt
 	echo "Creating new symbolic links..."
 	rm /usr/bin/palemoon
 	ln -vs /opt/palemoon/palemoon /usr/bin/palemoon
@@ -204,7 +204,7 @@ pmupdate_main ()
 		rm -vrf /opt/palemoon/dictionaries
 		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
 	fi
-	rm -r /opt/palemoon.temp
+	rm -r /tmp/pm4linux
 	dlg_i "Pale Moon has been updated successfully!"
 }
 
