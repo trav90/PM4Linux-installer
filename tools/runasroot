@@ -26,7 +26,7 @@ var_extract () {
 	check_existance)
 		declare -x | grep -E "^declare -x $2=" | sed -r 's/^declare -x/\[\[ -z $'"$2"' ]] \&\& export/'
 		;;
-	esac	
+	esac
 }
 
 # Create a temp file that sets $XAUTHORITY, $DISPLAY and executes the actual command.
@@ -37,6 +37,9 @@ create_tmp_script ()
 	var_extract no_check_existance DISPLAY >> $tmp_script
 	var_extract check_existance XAUTHORITY >> $tmp_script
 	var_extract no_check_existance http_proxy >> $tmp_script
+	var_extract no_check_existance https_proxy >> $tmp_script
+	var_extract no_check_existance ftp_proxy >> $tmp_script
+	var_extract no_check_existance no_proxy >> $tmp_script
 	echo 'exec "$@"' >> $tmp_script
 	chmod +x $tmp_script
 }
