@@ -125,6 +125,25 @@ pmaltset ()
 	esac
 }
 
+# Display hints regarding critical Pale Moon problems that depend on system configuration.
+display_install_hints ()
+{
+	oxygen_gtk_presence=0
+	oxygen_gtk_palemoon_absence=0
+
+	while read file; do
+		oxygen_gtk_presence=1
+		if ! grep -q palemoon "$file"; then
+		   oxygen_gtk_palemoon_absence=1
+		   break
+		fi
+	done < <(find /usr/lib /usr/lib64 /lib -type f -name 'liboxygen-gtk.so' 2>/dev/null)
+
+	if [[ $oxygen_gtk_presence -eq 1 ]] && [[ $oxygen_gtk_palemoon_absence -eq 1 ]]; then
+		dlg_i "<b>Important note:</b> You are using an older version of the oxygen-gtk/gtk2-engines-oxygen package, which may conflict with Pale Moon and cause crashes. Please upgrade the package, or switch to a different theming engine if you continue to have problems after upgrading."
+	fi
+}
+
 # Install Pale Moon
 pminstall_main ()
 {
@@ -162,6 +181,7 @@ pminstall_main ()
 	fi
 
 	dlg_i "Pale Moon has been successfully installed on your computer!"
+	display_install_hints
 }
 
 # Uninstall Pale Moon
