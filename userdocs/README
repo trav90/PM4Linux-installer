@@ -16,16 +16,19 @@
 
 Note:
 
-- The installer may not run on some "lightweight" distributions since the standard command line tools use busybox (which does not implement all features of the required command line tools).
+At this time, the installer does not work with the Atom optimized builds of Pale Moon for Linux. You can manually download them from http://linux.palemoon.org/atom/
 - Do not invoke the installer as root (e.g. "sudo ./pminstaller.sh"). On some distros, the sudo command will strip the XAUTHORITY variable (without which any graphical program cannot run). The installer will automatically elevate itself using su(do).
 - If you recieve a "Gtk-WARNING **: cannot open display" error when trying to run the installer, ensure that xhost is installed on your system then try to run the installer again.
+- The installer may not run on some "lightweight" distributions since the standard command line tools use busybox (which does not implement all features of the required command line tools).
 - If the installer does not run because the built-in copy of yad complains about being unable to load a particular library, then you clearly do not have the basic dependencies required for any recent Mozilla based product. Please update the related libraries and try again.
-- If you have any specialized requirements that the installer does not serve out of the box, then please use the command line instructions in the Pale Moon for Linux wiki (http://linux.palemoon.org/wiki) for installing Pale Moon.
+- If you have any specialized requirements that the installer does not serve out of the box, then please use the manual installation instructions on the Pale Moon for Linux site (http://linux.palemoon.org/help/installation/).
 
 ## Support
 
-Some help documentation is available on the Pale Moon for Linux wiki (http://linux.palemoon.org/wiki). You can also ask questions on the dedicated Linux board of the Pale Moon forum (http://forum.palemoon.org/).
+Some help documentation is available on the Pale Moon for Linux site (http://linux.palemoon.org/help/faq/). You can also ask questions on the dedicated Linux board of the Pale Moon forum (http://forum.palemoon.org/).
 
 Please note that support is not provided for older versions of the installer. Please use the latest version at all times.
 
-You can find the latest version of the installer at http://linux.palemoon.org/
+You can find the latest version of the installer at http://linux.palemoon.org/download/installer/
+
+You can also view release notes fo pminstaller at http://linux.palemoon.org/information/installer-release-notes/

@@ -5,6 +5,8 @@
 The Pale Moon for Linux installer (also referred to as pminstaller) is a program that is meant
 to ease installation of the Pale Moon binaries on Linux, made available on http://linux.palemoon.org.
 
+Note that at this time, pminstaller will not work with the Atom optimized Pale Moon for Linux builds.
+
 ## Compiling from source
 
 To compile from source, type in the following:
