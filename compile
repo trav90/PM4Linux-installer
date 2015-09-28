@@ -2,7 +2,7 @@
 
 # Constants
 base_url="http://linux.palemoon.org"
-version="0.2.0"
+version="0.2.1"
 
 # Compile the scripts into a single self-extracting script and package it within a *.tar.bz2
 
