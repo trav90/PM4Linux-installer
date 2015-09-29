@@ -259,7 +259,7 @@ pminstall ()
 		errorlevel=$?
 		case $errorlevel in
 		2)
-			xdg-open http://linux.palemoon.org &
+			xdg-open http://linux.palemoon.org/download/archive/
 			;;
 		1)
 			return
