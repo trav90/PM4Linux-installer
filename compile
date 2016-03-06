@@ -90,7 +90,7 @@ if [[ -z $no_minify ]]; then
       if head -n 1 "$filename" | grep -E '^#!/bin/(ba)?sh' &> /dev/null; then
          echo "Minifying $filename..."
          # bash_obfus seems to have some problems with stripping indented comments, so...
-         "$selfdir/bash_obfus.plx" -i "$filename" -o /dev/stdout -C -F | grep -Ev '^#[^!]' > "$filename.1"
+         "$selfdir/bashobfus/bash_obfus.pl" -i "$filename" -o /dev/stdout -C -F | grep -Ev '^#[^!]' > "$filename.1"
          mv "$filename.1" "$filename"
       fi
    done < <(find . -type f ! -wholename "*/files/*")

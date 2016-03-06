@@ -1,0 +1,3 @@
+[submodule "bashobfus"]
+	path = bashobfus
+	url = https://github.com/Aralhach/bashobfus.git
