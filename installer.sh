@@ -140,7 +140,7 @@ display_install_hints ()
 	done < <(find /usr/lib /usr/lib64 /lib -type f -name 'liboxygen-gtk.so' 2>/dev/null)
 
 	if [[ $oxygen_gtk_presence -eq 1 ]] && [[ $oxygen_gtk_palemoon_absence -eq 1 ]]; then
-		dlg_i "<b>Important note:</b> You are using an older version of the oxygen-gtk/gtk2-engines-oxygen package, which may conflict with Pale Moon and cause crashes. Please upgrade the package, or switch to a different theming engine if you continue to have problems after upgrading."
+		dlg_i "<b>Important note:</b> The oxygen-gtk/gtk2-engines-oxygen package has been detected on your system. Some versions of this package may conflict with Pale Moon and cause crashes. Please either upgrade the package, or switch to a different theming engine if you have problems with Pale Moon."
 	fi
 }
 
