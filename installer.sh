@@ -165,7 +165,7 @@ pminstall_main ()
 
 	echo "Creating menu entry..."
 	cp "$installer_dir/files/palemoon.desktop" /usr/share/applications/palemoon.desktop
-	
+
 	echo "Updating the icon cache..."
 	gtk-update-icon-cache -f /usr/share/icons/hicolor
 
@@ -177,7 +177,7 @@ pminstall_main ()
 	# Only create hunspell symlink if language packages have been installed
 	if [[ "$(ls /usr/share/hunspell)" ]]; then
 		rm -vrf /opt/palemoon/dictionaries
-		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
+		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries
 	fi
 
 	dlg_i "Pale Moon has been successfully installed on your computer!"
@@ -222,7 +222,7 @@ pmupdate_main ()
 	ln -vs /opt/palemoon/palemoon /usr/bin/palemoon
 	if [[ "$(ls /usr/share/hunspell)" ]]; then
 		rm -vrf /opt/palemoon/dictionaries
-		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries 
+		ln -vs /usr/share/hunspell /opt/palemoon/dictionaries
 	fi
 	rm -r /tmp/pm4linux
 	dlg_i "Pale Moon has been updated successfully!"
@@ -255,7 +255,7 @@ pminstall ()
 		return
 	fi
 	while true; do
-		pm_ver="$(dlg_q "Please select/type in the version you would like to install:" --entry "Latest version" --editable --button="Show versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
+		pm_ver="$(dlg_q "Press OK to install the latest version, or enter the previous version you would like to install below:" --entry --entry-text "Latest version" --editable --button="Show versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
 		errorlevel=$?
 		case $errorlevel in
 		2)
