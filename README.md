@@ -15,7 +15,7 @@ You can find Release notes for each release of pminstaller here: http://linux.pa
 
 The source distribution is arranged in the following manner:
 
-- `/bashobfus` - A Git sub-module containing the basobfus tool used by the installer.
+- `/bashobfus` - A Git sub-module containing the bashobfus tool used by the installer.
 See https://github.com/Aralhach/bashobfus for more information.
 
 - `/bin/{arch}` - Binaries specific to a specific architecture which are not
