@@ -231,13 +231,13 @@ pmupdate_main ()
 # Retrieve Pale Moon archive
 archive_download ()
 {
-	gwget "$base_url/installer/download.php?v=$1&a=$mtype" "$pm_archive"
+	gwget "$base_url/?component=pminstaller&function=download&architecture=$mtype&version=$1" "$pm_archive"
 }
 
 # Retrieve latest version info
 get_latest_version ()
 {
-	gwget "$base_url/installer/latest.php" "$installer_dir/latest"
+	gwget "$base_url/?component=pminstaller&function=latest" "$installer_dir/latest" 
 	cat "$installer_dir/latest"
 }
 
