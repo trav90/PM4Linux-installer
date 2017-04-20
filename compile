@@ -68,7 +68,7 @@ cd "$(dirname "$0")"
 selfdir="$(pwd)"
 
 if [[ -e build ]]; then
-	rm -rf build
+   rm -rf build
 fi
 
 echo "Copying required files..."
@@ -80,7 +80,7 @@ cd build
 # Perform required substitutions
 echo "Perform required substitutions in the script(s)..."
 while read filename; do
-	sed -i'' -r "s|__BASE_URL__|$base_url|g;s|__VERSION__|$version|g" "$filename"
+   sed -i'' -r "s|__BASE_URL__|$base_url|g;s|__VERSION__|$version|g" "$filename"
 done < <(find . -type f ! -wholename '*/bin/*')
 
 # Minify scripts
@@ -99,9 +99,9 @@ fi
 # Set permissions
 echo "Setting permissions for files in SFX archive..."
 while read filename; do
-	if head -c 4 "$filename" | grep -E $'(#!|\x7fELF)' &> /dev/null; then
-		chmod -v a+x "$filename"
-	fi
+   if head -c 4 "$filename" | grep -E $'(#!|\x7fELF)' &> /dev/null; then
+      chmod -v a+x "$filename"
+   fi
 done < <(find . -type f)
 
 # Prepare SFX

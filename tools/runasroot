@@ -4,13 +4,13 @@
 
 dlg ()
 {
-	yad --window-icon=system-lock-screen --geometry=500 "$@"
+  yad --window-icon=system-lock-screen --geometry=500 "$@"
 }
 
 # Error dialog
 dlg_e ()
 {
-	dlg --title "Error" --image=gtk-dialog-error --button=gtk-ok --text "$1"
+  dlg --title "Error" --image=gtk-dialog-error --button=gtk-ok --text "$1"
 }
 
 # Extract the contents of a variable *safely*.
@@ -19,75 +19,75 @@ dlg_e ()
 # no_check_existance: Create "export variable_name=[...]" statement.
 # check_existance: Create above with '[[ -z $variable_name ]] &&' prepended.
 var_extract () {
-	case "$1" in
-	no_check_existance)
-		declare -x | grep -E "^declare -x $2=" | sed -r 's/^declare -x/export/'
-		;;
-	check_existance)
-		declare -x | grep -E "^declare -x $2=" | sed -r 's/^declare -x/\[\[ -z $'"$2"' ]] \&\& export/'
-		;;
-	esac
+  case "$1" in
+  no_check_existance)
+    declare -x | grep -E "^declare -x $2=" | sed -r 's/^declare -x/export/'
+    ;;
+  check_existance)
+    declare -x | grep -E "^declare -x $2=" | sed -r 's/^declare -x/\[\[ -z $'"$2"' ]] \&\& export/'
+    ;;
+  esac
 }
 
 # Create a temp file that sets $XAUTHORITY, $DISPLAY and executes the actual command.
 create_tmp_script ()
 {
-	tmp_script=$(mktemp /tmp/runasroot.XXXXXXXXX)
-	echo '#!/bin/bash' > $tmp_script
-	var_extract no_check_existance DISPLAY >> $tmp_script
-	var_extract check_existance XAUTHORITY >> $tmp_script
-	var_extract no_check_existance http_proxy >> $tmp_script
-	var_extract no_check_existance https_proxy >> $tmp_script
-	var_extract no_check_existance ftp_proxy >> $tmp_script
-	var_extract no_check_existance no_proxy >> $tmp_script
-	echo 'exec "$@"' >> $tmp_script
-	chmod +x $tmp_script
+  tmp_script=$(mktemp /tmp/runasroot.XXXXXXXXX)
+  echo '#!/bin/bash' > $tmp_script
+  var_extract no_check_existance DISPLAY >> $tmp_script
+  var_extract check_existance XAUTHORITY >> $tmp_script
+  var_extract no_check_existance http_proxy >> $tmp_script
+  var_extract no_check_existance https_proxy >> $tmp_script
+  var_extract no_check_existance ftp_proxy >> $tmp_script
+  var_extract no_check_existance no_proxy >> $tmp_script
+  echo 'exec "$@"' >> $tmp_script
+  chmod +x $tmp_script
 }
 
 enable_root_connect_to_x ()
 {
-	which xhost &>/dev/null && xhost + &>/dev/null
+  which xhost &>/dev/null && xhost + &>/dev/null
 }
 
 disable_root_connect_to_x ()
 {
-	which xhost &>/dev/null && xhost - &>/dev/null
-}	
+  which xhost &>/dev/null && xhost - &>/dev/null
+} 
 
 if [[ -z "$1" ]]; then
-	echo "Usage: $0 [command]"
-	exit 0
+  echo "Usage: $0 [command]"
+  exit 0
 fi
 
 if [[ $EUID == 0 ]]; then
-	exec "$@"
+  exec "$@"
 fi
 
 if which sudo &>/dev/null; then
-	while true; do
-		prompt="$(sudo -Sk true < /dev/null 2>&1)"
-		pw="$(dlg --entry --hide-text --text "$prompt" --image=dialog-password --title "Authorization required")" || exit 254
-		if ! echo "$pw" | sudo -S bash -c '[[ $EUID == 0 ]]'; then
-			dlg_e "The installer could not start. Please verify your password is correct and that you have sudo rights and then try again."
-		else
-			create_tmp_script
-			enable_root_connect_to_x
-			echo "$pw" | sudo -S $tmp_script "$@"
-			errorlevel=$?
-			disable_root_connect_to_x
-			exit $?
-		fi
-	done
+  while true; do
+    prompt="$(sudo -Sk true < /dev/null 2>&1)"
+    pw="$(dlg --entry --hide-text --text "$prompt" --image=dialog-password --title "Authorization required")" || exit 254
+    if ! echo "$pw" | sudo -S bash -c '[[ $EUID == 0 ]]'; then
+      dlg_e "The installer could not start. Please verify your password is correct and that you have sudo rights and then try again."
+    else
+      create_tmp_script
+      enable_root_connect_to_x
+      echo "$pw" | sudo -S $tmp_script "$@"
+      errorlevel=$?
+      disable_root_connect_to_x
+      exit $?
+    fi
+  done
 else
-	terminal_command=$(terminal-emulator)
-	if [[ $? != 0 ]]; then
-		dlg_e "A suitable terminal emulator could not be found! Please execute the required command from a terminal emulator."
-	else
-		create_tmp_script
-		enable_root_connect_to_x
-		$terminal_command su_wrapper $tmp_script "$@"
-		errorlevel=$?
-		disable_root_connect_to_x
-		exit $?
-	fi
+  terminal_command=$(terminal-emulator)
+  if [[ $? != 0 ]]; then
+    dlg_e "A suitable terminal emulator could not be found! Please execute the required command from a terminal emulator."
+  else
+    create_tmp_script
+    enable_root_connect_to_x
+    $terminal_command su_wrapper $tmp_script "$@"
+    errorlevel=$?
+    disable_root_connect_to_x
+    exit $?
+  fi
 fi

@@ -5,21 +5,21 @@
 unset CDPATH
 
 if [[ ! "$(sed -r s/[a-f0-9]{64}// "$0" | sha256sum)" =~ __CHECKSUM__ ]]; then
-	echo "The installer is damaged! Please redownload the installer and try again."
-	exit 2
+  echo "The installer is damaged! Please redownload the installer and try again."
+  exit 2
 fi
 
 case $(uname -m) in
 i?86)
-	mtype=i686
-	;;
+  mtype=i686
+  ;;
 x86_64)
-	mtype=x86_64
-	;;
+  mtype=x86_64
+  ;;
 *)
-	echo "Unsupported architecture."
-	exit 1
-	;;
+  echo "Unsupported architecture."
+  exit 1
+  ;;
 esac
 
 installer_dir=$(mktemp -d /tmp/pminstaller.XXXXXX)

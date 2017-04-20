@@ -5,12 +5,12 @@
 echo "Please enter the password for root."
 
 while true; do
-	su -s /bin/bash -c "$(printf "%q " "$@")"
-	errorlevel=$?
-	[[ $errorlevel == 0 ]] && break
-	read -n 1 -p "Incorrect password/execution failed. Retry? (Y/N)" ch
-	echo # Print \n
-	[[ ! "$ch" =~ [Yy] ]] && break
+  su -s /bin/bash -c "$(printf "%q " "$@")"
+  errorlevel=$?
+  [[ $errorlevel == 0 ]] && break
+  read -n 1 -p "Incorrect password/execution failed. Retry? (Y/N)" ch
+  echo # Print \n
+  [[ ! "$ch" =~ [Yy] ]] && break
 done
 
 exit $errorlevel

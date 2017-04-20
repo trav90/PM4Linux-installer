@@ -9,7 +9,7 @@
 - Extract the contents of the archive to your home directory.
 - Run the "pminstaller.sh" script from the file manager by double clicking on it. If, however, this does not work for some reason, then open a terminal emulator window, type the following and hit enter.
 
-		~/pminstaller.sh
+    ~/pminstaller.sh
 
   (Assuming the "pminstaller.sh" script is placed in the home directory, as instructed above).
 - Follow the on-screen prompts to continue.

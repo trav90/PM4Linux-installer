@@ -1,26 +1,26 @@
 #!/bin/bash
 
 if [[ -z "$1" ]] || [[ -z "$2" ]]; then
-	echo "Usage: $0 [URL] [file]"
-	exit 1
+  echo "Usage: $0 [URL] [file]"
+  exit 1
 fi
 
 if which wget &>/dev/null; then
-	( echo "#Connecting..."; wget "$1" -O "$2" 2>&1 ) | sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading Pale Moon..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --auto-kill --button=gtk-cancel
+  ( echo "#Connecting..."; wget "$1" -O "$2" 2>&1 ) | sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading Pale Moon..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --auto-kill --button=gtk-cancel
 elif which curl &>/dev/null; then
-	( echo "#Connecting..."; curl -Lf "$1" -o "$2" 2>&1 ) | stdbuf -oL tr '\r' '\n' | sed -ur 's/^\s*([0-9]+).*/\1\n#Downloading... \1%/' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading Pale Moon..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --no-buttons
+  ( echo "#Connecting..."; curl -Lf "$1" -o "$2" 2>&1 ) | stdbuf -oL tr '\r' '\n' | sed -ur 's/^\s*([0-9]+).*/\1\n#Downloading... \1%/' | yad --window-icon=applications-internet --image=gtk-save --geometry=500 --progress --percentage=0 --title "Downloading Pale Moon..." --text "$(echo "$1" | sed 's/&/&amp\;/g')" --auto-close --no-buttons
 else
-	exit 2
+  exit 2
 fi
 
 errorlevel=${PIPESTATUS[0]}
 
 case $errorlevel in
 0)
-	exit 0
-	;;
+  exit 0
+  ;;
 *)
-	[[ -f "$2" ]] && rm "$2"
-	exit 1
-	;;
+  [[ -f "$2" ]] && rm "$2"
+  exit 1
+  ;;
 esac
