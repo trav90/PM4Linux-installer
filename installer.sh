@@ -255,7 +255,7 @@ pminstall ()
     return
   fi
   while true; do
-    pm_ver="$(dlg_q "Press OK to install the latest version, or enter the previous version you would like to install below:" --entry --entry-text "Latest version" --editable --button=gtk-ok:0 --button=gtk-cancel:1 --button="Archived versions...":2)"
+    pm_ver="$(dlg_q "Press OK to download and install the latest version of Pale Moon." --entry --entry-text "Latest version" --button=gtk-ok:0 --button=gtk-cancel:1 --button="Archived versions...":2)"
     errorlevel=$?
     case $errorlevel in
     0)
@@ -270,11 +270,7 @@ pminstall ()
         fi
         ;;
       *)
-        if ! is_version_valid "$pm_ver"; then
-          dlg_e "The selected version number is invalid. Please try again."
-        else
-          break
-        fi
+        dlg_e "Only the latest version can be installed with this script."
         ;;
       esac
     ;;
