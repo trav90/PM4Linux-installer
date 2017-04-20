@@ -237,7 +237,7 @@ archive_download ()
 # Retrieve latest version info
 get_latest_version ()
 {
-  gwget "$base_url/?component=pminstaller&function=latest" "$installer_dir/latest" 
+  gwget "$base_url/?component=pminstaller&function=latest" "$installer_dir/latest"
   cat "$installer_dir/latest"
 }
 

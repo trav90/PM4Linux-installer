@@ -52,7 +52,7 @@ enable_root_connect_to_x ()
 disable_root_connect_to_x ()
 {
   which xhost &>/dev/null && xhost - &>/dev/null
-} 
+}
 
 if [[ -z "$1" ]]; then
   echo "Usage: $0 [command]"
