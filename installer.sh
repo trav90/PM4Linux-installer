@@ -255,11 +255,11 @@ pminstall ()
     return
   fi
   while true; do
-    pm_ver="$(dlg_q "Press OK to install the latest version, or enter the previous version you would like to install below:" --entry --entry-text "Latest version" --editable --button="Show versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
+    pm_ver="$(dlg_q "Press OK to install the latest version, or enter the previous version you would like to install below:" --entry --entry-text "Latest version" --editable --button="Archived versions...":2 --button=gtk-cancel:1 --button=gtk-ok:0)"
     errorlevel=$?
     case $errorlevel in
     2)
-      xdg-open http://linux.palemoon.org/download/archive/
+      xdg-open https://www.palemoon.org/archived.shtml
       ;;
     1)
       return
