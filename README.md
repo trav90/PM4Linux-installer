@@ -3,11 +3,11 @@
 ---
 
 The Pale Moon for Linux installer (also referred to as pminstaller) is a script that is meant
-to ease installation of the Pale Moon binaries on Linux, made available at https://linux.palemoon.org.
+to ease installation of the mainline Pale Moon binaries on Linux, made available at https://linux.palemoon.org.
 
 You can find more information about using pminstaller here: https://linux.palemoon.org/download/installer/
 
-You can find Release notes for each release of pminstaller here: https://linux.palemoon.org/information/installer-release-notes/
+You can find Release notes for each release of pminstaller here: https://linux.palemoon.org/installer-release-notes/
 
 ## Technical details
 
@@ -19,9 +19,9 @@ See https://github.com/Aralhach/bashobfus for more information.
 - `/bin/{arch}` - Binaries specific to a specific architecture which are not
 commonly found in (major) Linux distros.
 
-- `/tools/` - Executable scripts used in the installer meant for general usage.
+- `/tools` - Executable scripts used in the installer meant for general usage.
 
-  `*.wrapper` are taken from Debian and used for terminal emulators that do not
+- `*.wrapper` are taken from Debian and used for terminal emulators that do not
   handle `-e` arguments properly.
 
 - `/files` - Contains files to be deployed onto the target system.
