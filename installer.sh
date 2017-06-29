@@ -128,6 +128,7 @@ pmaltset ()
 # Display (non-critical) warnings regarding potential Pale Moon problems depending on system configuration.
 display_install_warnings ()
 {
+  # Older versions of the oxygen-gtk theming engine are known to cause stability issues when used with Pale Moon. Warn the user if the lib is found on the system. 
   oxygen_gtk_presence=0
   oxygen_gtk_palemoon_absence=0
 
