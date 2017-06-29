@@ -125,8 +125,8 @@ pmaltset ()
   esac
 }
 
-# Display hints regarding critical Pale Moon problems that depend on system configuration.
-display_install_hints ()
+# Display (non-critical) warnings regarding potential Pale Moon problems depending on system configuration.
+display_install_warnings ()
 {
   oxygen_gtk_presence=0
   oxygen_gtk_palemoon_absence=0
@@ -181,7 +181,7 @@ pminstall_main ()
   fi
 
   dlg_i "Pale Moon has been successfully installed on your computer!"
-  display_install_hints
+  display_install_warnings
 }
 
 # Uninstall Pale Moon
