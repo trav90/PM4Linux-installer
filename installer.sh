@@ -161,7 +161,8 @@ display_critical_warnings ()
   done < <(find /usr/lib /usr/lib64 /lib -type f -name 'libgomp.so.1' 2>/dev/null)
 
   if [[ $libgomp_presence -eq 1 ]] && [[ $libgomp_palemoon_absence -eq 1 ]]; then
-    dlg_i "<b>Installation failed!</b> The libgomp.so.1 library was not detected on your system. Pale Moon uses OpenMP parallelization and requires libgomp.so.1. Please add this library to your system and try installing Pale Moon again."
+    dlg_e "<b>Installation failed!</b> The libgomp.so.1 library was not detected on your system. Pale Moon uses OpenMP parallelization and requires libgomp.so.1. Please add this library to your system and try installing Pale Moon again."
+    exit 0
   fi
 }
 
