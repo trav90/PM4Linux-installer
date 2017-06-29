@@ -145,9 +145,30 @@ display_install_warnings ()
   fi
 }
 
+# Display critical, installation-blocking warnings regarding potential system configuration issues that may prevent Pale Moon from running.
+display_critical_warnings ()
+{
+  # Mainline builds of Pale Moon use OpenMP parallelization, and will not run without libgomp.so.1 on the system.
+  libgomp_presence=0
+  libgomp_palemoon_absence=0
+
+  while read file; do
+    libgomp_presence=1
+    if ! grep -q palemoon "$file"; then
+       libgomp_palemoon_absence=1
+       break
+    fi
+  done < <(find /usr/lib /usr/lib64 /lib -type f -name 'libgomp.so.1' 2>/dev/null)
+
+  if [[ $libgomp_presence -eq 1 ]] && [[ $libgomp_palemoon_absence -eq 1 ]]; then
+    dlg_i "<b>Installation failed!</b> The libgomp.so.1 library was not detected on your system. Pale Moon uses OpenMP parallelization and requires libgomp.so.1. Please add this library to your system and try installing Pale Moon again."
+  fi
+}
+
 # Install Pale Moon
 pminstall_main ()
 {
+  display_critical_warnings
   echo "Extracting archive..."
   mkdir -p /opt
   if ! tar -xvf "$pm_archive" -C /opt; then
